@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { tmdbFetch } from '@/lib/tmdb'
+import { tmdbFetch } from '../lib/tmdb'
 import Link from 'next/link'
-import ContinueWatching from '@/components/ContinueWatching'
-import SurpriseMe from '@/components/SurpriseMe'
-import { useTVFocus } from '@/components/useTVFocus'
+import ContinueWatching from '../components/ContinueWatching'
+import SurpriseMe from '../components/SurpriseMe'
+import { useTVFocus } from '../components/useTVFocus'
+
 
 export default function HomePage() {
   useTVFocus()

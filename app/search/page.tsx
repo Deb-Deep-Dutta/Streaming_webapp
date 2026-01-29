@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { tmdbFetch } from '@/lib/tmdb'
+import { tmdbFetch } from '../../lib/tmdb'
 import Link from 'next/link'
-import { useTVFocus } from '@/components/useTVFocus'
+import { useTVFocus } from '../../components/useTVFocus'
+
 
 export default function SearchPage() {
   useTVFocus()

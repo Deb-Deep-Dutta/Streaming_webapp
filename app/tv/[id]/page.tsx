@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import PlayerShell from '@/components/PlayerShell'
-import { tmdbFetch } from '@/lib/tmdb'
-import { buildTvEmbedUrl } from '@/lib/vidfast'
+import PlayerShell from '../../../components/PlayerShell'
+import { tmdbFetch } from '../../../lib/tmdb'
+import { buildTvEmbedUrl } from '../../../lib/vidfast'
+
 
 type Episode = {
   episode_number: number
