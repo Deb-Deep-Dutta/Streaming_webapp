@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import PlayerShell from '@/components/PlayerShell'
-import { tmdbFetch } from '@/lib/tmdb'
-import { buildMovieEmbedUrl } from '@/lib/vidfast'
+import PlayerShell from '../../../components/PlayerShell'
+import { tmdbFetch } from '../../../lib/tmdb'
+import { buildMovieEmbedUrl } from '../../../lib/vidfast'
 
 type Movie = {
   title: string

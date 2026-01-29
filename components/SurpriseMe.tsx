@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { tmdbFetch } from '@/lib/tmdb'
+import { tmdbFetch } from '../lib/tmdb'
 
 export default function SurpriseMe() {
   const router = useRouter()

@@ -1,6 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import TmdbAttribution from '@/components/TmdbAttribution'
+import TmdbAttribution from '../components/TmdbAttribution'
 
 export const metadata: Metadata = {
   title: 'Stream Explorer',
