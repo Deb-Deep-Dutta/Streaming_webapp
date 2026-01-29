@@ -2,55 +2,39 @@
 
 import { useEffect, useState } from 'react'
 import { tmdbFetch } from '../lib/tmdb'
-import Link from 'next/link'
-import ContinueWatching from '../components/ContinueWatching'
-import SurpriseMe from '../components/SurpriseMe'
-import { useTVFocus } from '../components/useTVFocus'
-
+import HeroBanner from '../components/HeroBanner'
+import RecommendationRow from '../components/RecommendationRow'
 
 export default function HomePage() {
-  useTVFocus()
-
-  const [items, setItems] = useState<any[]>([])
+  const [featured, setFeatured] = useState<any[]>([])
+  const [movies, setMovies] = useState<any[]>([])
+  const [tv, setTv] = useState<any[]>([])
 
   useEffect(() => {
-    tmdbFetch<any>('trending/all/week')
-      .then(data => setItems(data.results))
-      .catch(() => {})
+    tmdbFetch<any>('trending/all/week').then(d => setFeatured(d.results))
+    tmdbFetch<any>('discover/movie', { sort_by: 'popularity.desc' }).then(d =>
+      setMovies(d.results)
+    )
+    tmdbFetch<any>('discover/tv', { sort_by: 'popularity.desc' }).then(d =>
+      setTv(d.results)
+    )
   }, [])
 
   return (
-    <main style={{ padding: '1rem' }}>
-      <h1>Discover</h1>
+    <>
+      <HeroBanner items={featured.slice(0, 5)} />
 
-      <SurpriseMe />
-      <ContinueWatching />
+      <RecommendationRow
+        title="Recommended Movies"
+        items={movies.slice(0, 15)}
+        seeMoreHref="/movies"
+      />
 
-      <h2 style={{ marginTop: '2rem' }}>Trending</h2>
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-          gap: '1rem'
-        }}
-      >
-        {items
-          .filter(i => i.media_type === 'movie' || i.media_type === 'tv')
-          .map(item => (
-            <Link
-              key={`${item.media_type}-${item.id}`}
-              href={`/${item.media_type}/${item.id}`}
-            >
-              <img
-                src={`https://image.tmdb.org/t/p/w342${item.poster_path}`}
-                alt={item.title || item.name}
-                style={{ width: '100%', borderRadius: '8px' }}
-              />
-              <div>{item.title || item.name}</div>
-            </Link>
-          ))}
-      </div>
-    </main>
+      <RecommendationRow
+        title="Recommended TV Shows"
+        items={tv.slice(0, 15)}
+        seeMoreHref="/tv"
+      />
+    </>
   )
 }

@@ -119,3 +119,43 @@ a,
   align-items: center;
   justify-content: center;
 }
+
+/* Mobile only nav */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* TV / distance optimization */
+@media (min-width: 1200px) {
+  body {
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+  }
+
+  img {
+    border-radius: 14px;
+  }
+
+  a,
+  button,
+  select {
+    min-height: 56px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Prevent layout shift when tiles expand */
+section {
+  overflow: visible;
+}
+
+/* Strong focus ring for TV */
+:focus-visible {
+  outline: 3px solid #00e0ff;
+  outline-offset: 4px;
+}
