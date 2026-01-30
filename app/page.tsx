@@ -1,7 +1,6 @@
-// app/page.tsx
 import { fetchFromTMDB } from '../lib/tmdb';
 import HeroBanner from '../components/HeroBanner';
-import RecommendationRow from '../components/RecommendationRow';
+import NetflixRow from '../components/NetflixRow'; // <--- Import the new component
 
 export const dynamic = 'force-dynamic';
 
@@ -18,18 +17,30 @@ export default async function HomePage() {
   const tv = tvData.results || [];
 
   return (
-    <main>
-      {featured.length > 0 && <HeroBanner items={featured.slice(0, 5)} />}
+    <main className="pb-20"> {/* Added padding bottom so footer doesn't overlap content */}
+      
+      {/* Hero Section */}
+      {featured.length > 0 && <HeroBanner items={featured.slice(0, 10)} />}
 
-      <RecommendationRow
-        title="Recommended Movies"
-        items={movies.slice(0, 15)}
-      />
+      {/* Netflix Style Rows */}
+      <div className="flex flex-col gap-4 mt-4 md:-mt-32 relative z-10"> 
+        {/* Negative margin pulls rows up over the hero gradient like Netflix */}
+        
+        <NetflixRow
+          title="Trending Now"
+          items={featured}
+        />
 
-      <RecommendationRow
-        title="Recommended TV Shows"
-        items={tv.slice(0, 15)}
-      />
+        <NetflixRow
+          title="New Releases"
+          items={movies}
+        />
+
+        <NetflixRow
+          title="Popular TV Shows"
+          items={tv}
+        />
+      </div>
     </main>
   );
 }
