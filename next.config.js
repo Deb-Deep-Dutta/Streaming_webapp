@@ -11,11 +11,11 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' https://image.tmdb.org data:",
               "font-src 'self'",
-              "frame-src https://vidfast.pro https://vidfast.in https://vidfast.io https://vidfast.me https://vidfast.net https://vidfast.pm https://vidfast.xyz",
+              "frame-src https://vidfast.pro https://vidfast.in https://vidfast.io https://vidfast.me https://vidfast.net https://vidfast.pm https://vidfast.xyz https://www.youtube.com",
               "connect-src 'self' https://api.themoviedb.org",
               "media-src 'self'",
               "object-src 'none'",
