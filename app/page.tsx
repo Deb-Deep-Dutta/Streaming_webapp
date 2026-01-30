@@ -11,12 +11,16 @@ export default function HomePage() {
   const [tv, setTv] = useState<any[]>([])
 
   useEffect(() => {
-    tmdbFetch<any>('trending/all/week').then(d => setFeatured(d.results))
+    tmdbFetch<any>('trending/all/week').then(d => {
+      setFeatured(d.results || [])
+    })
+
     tmdbFetch<any>('discover/movie', { sort_by: 'popularity.desc' }).then(d =>
-      setMovies(d.results)
+      setMovies(d.results || [])
     )
+
     tmdbFetch<any>('discover/tv', { sort_by: 'popularity.desc' }).then(d =>
-      setTv(d.results)
+      setTv(d.results || [])
     )
   }, [])
 
@@ -27,13 +31,11 @@ export default function HomePage() {
       <RecommendationRow
         title="Recommended Movies"
         items={movies.slice(0, 15)}
-        seeMoreHref="/movies"
       />
 
       <RecommendationRow
         title="Recommended TV Shows"
         items={tv.slice(0, 15)}
-        seeMoreHref="/tv"
       />
     </>
   )
