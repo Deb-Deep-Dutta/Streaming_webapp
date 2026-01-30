@@ -1,20 +1,24 @@
-const API_BASE = '/api/tmdb'
+// lib/tmdb.ts
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
-export async function tmdbFetch<T>(
-  path: string,
-  params: Record<string, string | number> = {}
-): Promise<T> {
-  const url = new URL(`${API_BASE}/${path}`, window.location.origin)
-
+export async function fetchFromTMDB(path: string, params: Record<string, string | number> = {}) {
+  const url = new URL(`${TMDB_BASE_URL}/${path}`);
+  url.searchParams.append('api_key', TMDB_API_KEY || '');
+  
   Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.append(key, String(value))
-  })
+    url.searchParams.append(key, String(value));
+  });
 
-  const res = await fetch(url.toString())
+  const res = await fetch(url.toString(), {
+    next: { revalidate: 3600 } // Updates every hour (Safe & Efficient)
+  });
 
   if (!res.ok) {
-    throw new Error('TMDB fetch failed')
+    console.error(`TMDB Error: ${res.status} ${res.statusText}`);
+    // Return empty result instead of crashing to keep the page alive if API fails
+    return { results: [] }; 
   }
 
-  return res.json()
+  return res.json();
 }

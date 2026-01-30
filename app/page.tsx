@@ -1,42 +1,25 @@
-'use client'
-export const dynamic = 'force-dynamic'
+// app/page.tsx
+import { fetchFromTMDB } from '../lib/tmdb';
+import HeroBanner from '../components/HeroBanner';
+import RecommendationRow from '../components/RecommendationRow';
 
-import { useEffect, useState } from 'react'
-import { tmdbFetch } from '../lib/tmdb'
-import HeroBanner from '../components/HeroBanner'
-import RecommendationRow from '../components/RecommendationRow'
+export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
-  const [featured, setFeatured] = useState<any[]>([])
-  const [movies, setMovies] = useState<any[]>([])
-  const [tv, setTv] = useState<any[]>([])
+export default async function HomePage() {
+  // Fetch everything in parallel
+  const [featuredData, moviesData, tvData] = await Promise.all([
+    fetchFromTMDB('trending/all/week'),
+    fetchFromTMDB('discover/movie', { sort_by: 'popularity.desc', page: 1 }),
+    fetchFromTMDB('discover/tv', { sort_by: 'popularity.desc', page: 1 })
+  ]);
 
-  useEffect(() => {
-    // Trending for hero
-    tmdbFetch<any>('trending/all/week')
-      .then(d => setFeatured(d.results || []))
-      .catch(() => {})
-
-    // Recommend movies
-    tmdbFetch<any>('discover/movie', {
-      sort_by: 'popularity.desc',
-      page: 1
-    })
-      .then(d => setMovies(d.results || []))
-      .catch(() => {})
-
-    // Recommend tv shows
-    tmdbFetch<any>('discover/tv', {
-      sort_by: 'popularity.desc',
-      page: 1
-    })
-      .then(d => setTv(d.results || []))
-      .catch(() => {})
-  }, [])
+  const featured = featuredData.results || [];
+  const movies = moviesData.results || [];
+  const tv = tvData.results || [];
 
   return (
-    <>
-      <HeroBanner items={featured.slice(0, 5)} />
+    <main>
+      {featured.length > 0 && <HeroBanner items={featured.slice(0, 5)} />}
 
       <RecommendationRow
         title="Recommended Movies"
@@ -47,6 +30,6 @@ export default function HomePage() {
         title="Recommended TV Shows"
         items={tv.slice(0, 15)}
       />
-    </>
-  )
+    </main>
+  );
 }
