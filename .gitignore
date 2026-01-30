@@ -4,5 +4,3 @@ node_modules
 .env.local
 .env.production
 .env.development
-components/RecommendationRow.tsx
-components/HoverPreviewTile.tsx
