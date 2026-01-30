@@ -8,52 +8,46 @@ interface PlayerShellProps {
   mediaType: 'movie' | 'tv';
   season?: number;
   episode?: number;
-  title?: string; // Optional: for display
+  title?: string;
 }
 
 export default function PlayerShell({ 
-  tmdbId, 
-  mediaType, 
-  season = 1, 
-  episode = 1,
-  title 
+  tmdbId, mediaType, season = 1, episode = 1, title 
 }: PlayerShellProps) {
   const [src, setSrc] = useState('');
 
-  // Setup the VidFast URL when the component mounts or props change
   useEffect(() => {
     const baseUrl = 'https://vidfast.pro';
-    const themeColor = '9B59B6'; // Matching your purple theme
+    const themeColor = '9B59B6'; 
     
-    // Construct the URL based on documentation
+    // FIX: Set autoPlay=false so it doesn't start automatically
+    // FIX: Added 'title=true' to show title in player
     let url = '';
     if (mediaType === 'movie') {
-      // Endpoint: /movie/{id}?autoPlay=true&theme=...
-      url = `${baseUrl}/movie/${tmdbId}?autoPlay=true&theme=${themeColor}`;
+      url = `${baseUrl}/movie/${tmdbId}?autoPlay=false&theme=${themeColor}&title=true`;
     } else {
-      // Endpoint: /tv/{id}/{season}/{episode}?autoPlay=true&theme=...
-      url = `${baseUrl}/tv/${tmdbId}/${season}/${episode}?autoPlay=true&theme=${themeColor}&nextButton=true&autoNext=true`;
+      url = `${baseUrl}/tv/${tmdbId}/${season}/${episode}?autoPlay=false&theme=${themeColor}&nextButton=true&autoNext=true&title=true`;
     }
 
     setSrc(url);
   }, [tmdbId, mediaType, season, episode]);
 
   return (
-    <div className="w-full max-w-screen-xl mx-auto my-8">
-      {/* 16:9 Aspect Ratio Container for Responsiveness */}
-      <div className="relative w-full pt-[56.25%] bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10">
+    <div className="w-full max-w-screen-2xl mx-auto px-0 md:px-12 mt-16 md:mt-24">
+      {/* 16:9 Container */}
+      <div className="relative w-full pt-[56.25%] bg-black rounded-none md:rounded-xl overflow-hidden shadow-2xl border-0 md:border border-white/10">
         {src ? (
           <iframe
             src={src}
             className="absolute top-0 left-0 w-full h-full"
             frameBorder="0"
             allowFullScreen
-            allow="autoplay; encrypted-media; picture-in-picture"
+            allow="encrypted-media; picture-in-picture" // Removed 'autoplay' from allow list just in case
             title={title || "Video Player"}
           />
         ) : (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-gray-500">
-            Loading Player...
+            <div className="animate-spin h-8 w-8 border-4 border-red-600 rounded-full border-t-transparent"></div>
           </div>
         )}
       </div>
