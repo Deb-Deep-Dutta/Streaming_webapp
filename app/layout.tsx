@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import Providers from './providers'
 import Header from '../components/Header'
 import TmdbAttribution from '../components/TmdbAttribution'
 import BottomNav from '../components/BottomNav'
@@ -23,21 +24,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <Header />
-
-        <main style={{ flex: 1 }}>
-          {children}
-        </main>
-
-        <TmdbAttribution />
-      <BottomNav />
+      <body>
+        <Providers>
+          <Header />
+          <main>{children}</main>
+          <BottomNav />
+          <TmdbAttribution />
+        </Providers>
       </body>
     </html>
   )
