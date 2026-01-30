@@ -159,3 +159,13 @@ section {
   outline: 3px solid #00e0ff;
   outline-offset: 4px;
 }
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+  }
+  .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+  }
+}

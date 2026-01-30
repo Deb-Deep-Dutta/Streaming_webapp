@@ -45,10 +45,10 @@ export default function NetflixRow({ title, items }: RowProps) {
         {/* Scrollable Container */}
         <div 
           ref={rowRef}
-          className="flex items-center space-x-2.5 overflow-x-scroll scrollbar-hide md:space-x-3.5 md:p-2"
-        >
+          className="flex items-center gap-2 overflow-x-scroll scrollbar-hide md:gap-4 md:p-2 relative z-20" 
+          style={{ scrollBehavior: 'smooth' }}>
           {items.map((item) => (
-             <NetflixCard key={item.id} item={item} />
+              <NetflixCard key={item.id} item={item} />
           ))}
         </div>
 

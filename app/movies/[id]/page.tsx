@@ -1,42 +1,48 @@
-'use client'
+// app/movies/[id]/page.tsx
+import { fetchFromTMDB } from '../../../lib/tmdb';
+import PlayerShell from '../../../components/PlayerShell';
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { tmdbFetch } from '../../../lib/tmdb'
-import FiltersPanel from '../../../components/FiltersPanel'
+export const dynamic = 'force-dynamic';
 
-export default function MoviesPage() {
-  const [items, setItems] = useState<any[]>([])
-  const [filters, setFilters] = useState<any>({})
+export default async function MoviePage({ params }: { params: { id: string } }) {
+  // Fetch details to get Title/Overview
+  const movie = await fetchFromTMDB(`movie/${params.id}`);
 
-  useEffect(() => {
-    tmdbFetch<any>('discover/movie', {
-      sort_by: 'popularity.desc',
-      with_genres: filters.genre,
-      with_original_language: filters.language,
-      'vote_average.gte': filters.rating
-    }).then(d => setItems(d.results))
-  }, [filters])
+  // Safety check: If movie fetch fails, handle gracefully (optional)
+  if (!movie || !movie.id) {
+     return <div className="text-white pt-20 text-center">Movie details not found.</div>;
+  }
 
   return (
-    <main style={{ padding: '1.5rem' }}>
-      <h1>Movies</h1>
-
-      <FiltersPanel
-        genre={filters.genre || ''}
-        language={filters.language || ''}
-        rating={filters.rating || ''}
-        onChange={(k, v) => setFilters(f => ({ ...f, [k]: v }))}
+    <div className="min-h-screen bg-[#141414] text-white pt-20 pb-20">
+      {/* 1. The Player Section */}
+      <PlayerShell 
+        tmdbId={params.id} 
+        mediaType="movie" 
+        title={movie.title}
       />
 
-      <div className="grid">
-        {items.map(i => (
-          <Link key={i.id} href={`/movie/${i.id}`}>
-            <img src={`https://image.tmdb.org/t/p/w342${i.poster_path}`} />
-            <div>{i.title}</div>
-          </Link>
-        ))}
+      {/* 2. Movie Details Section */}
+      <div className="px-4 md:px-12 mt-8 max-w-5xl mx-auto">
+        <div className="flex items-center gap-4 mb-4">
+           <h1 className="text-3xl md:text-5xl font-bold">{movie.title}</h1>
+           {movie.vote_average && (
+             <span className="bg-green-600/20 text-green-400 px-2 py-1 rounded text-sm font-bold border border-green-600/50">
+               {movie.vote_average.toFixed(1)} Match
+             </span>
+           )}
+        </div>
+
+        <div className="flex gap-4 text-gray-400 text-sm mb-6">
+           <span>{movie.release_date?.split('-')[0]}</span>
+           <span>•</span>
+           <span>{movie.runtime} min</span>
+           <span>•</span>
+           <span className="uppercase border border-gray-600 px-1 text-[10px]">HD</span>
+        </div>
+
+        <p className="text-gray-300 text-lg leading-relaxed max-w-3xl">{movie.overview}</p>
       </div>
-    </main>
-  )
+    </div>
+  );
 }
