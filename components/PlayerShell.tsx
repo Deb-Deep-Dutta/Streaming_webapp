@@ -20,8 +20,7 @@ export default function PlayerShell({
     const baseUrl = 'https://vidfast.pro';
     const themeColor = '9B59B6'; 
     
-    // FIX: Set autoPlay=false so it doesn't start automatically
-    // FIX: Added 'title=true' to show title in player
+    // AutoPlay is false to respect user preference and browser policies
     let url = '';
     if (mediaType === 'movie') {
       url = `${baseUrl}/movie/${tmdbId}?autoPlay=false&theme=${themeColor}&title=true`;
@@ -41,8 +40,12 @@ export default function PlayerShell({
             src={src}
             className="absolute top-0 left-0 w-full h-full"
             frameBorder="0"
+            // --- THE FIX: Block Popups ---
+            // We intentionally OMIT 'allow-popups' from this list.
+            // This forces the browser to block the redirect ads.
+            sandbox="allow-forms allow-scripts allow-same-origin allow-presentation"
             allowFullScreen
-            allow="encrypted-media; picture-in-picture" // Removed 'autoplay' from allow list just in case
+            allow="encrypted-media; picture-in-picture"
             title={title || "Video Player"}
           />
         ) : (
