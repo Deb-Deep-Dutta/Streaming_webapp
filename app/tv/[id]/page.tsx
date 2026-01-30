@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { tmdbFetch } from '../../lib/tmdb'
+import { tmdbFetch } from '../../../lib/tmdb'
 
 export default function TvPage() {
   const [items, setItems] = useState<any[]>([])

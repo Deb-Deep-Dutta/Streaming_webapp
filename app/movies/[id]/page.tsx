@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { tmdbFetch } from '../../lib/tmdb'
-import FiltersPanel from '../../components/FiltersPanel'
+import { tmdbFetch } from '../../../lib/tmdb'
+import FiltersPanel from '../../../components/FiltersPanel'
 
 export default function MoviesPage() {
   const [items, setItems] = useState<any[]>([])
