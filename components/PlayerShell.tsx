@@ -1,4 +1,3 @@
-// components/PlayerShell.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -17,15 +16,18 @@ export default function PlayerShell({
   const [src, setSrc] = useState('');
 
   useEffect(() => {
+    // VidFast base URL
     const baseUrl = 'https://vidfast.pro';
     const themeColor = '9B59B6'; 
     
-    // AutoPlay is false to respect user preference and browser policies
+    // FIX: Explicitly set autoPlay=false in URL params
+    const params = `?autoPlay=false&theme=${themeColor}&title=true`;
+    
     let url = '';
     if (mediaType === 'movie') {
-      url = `${baseUrl}/movie/${tmdbId}?autoPlay=false&theme=${themeColor}&title=true`;
+      url = `${baseUrl}/movie/${tmdbId}${params}`;
     } else {
-      url = `${baseUrl}/tv/${tmdbId}/${season}/${episode}?autoPlay=false&theme=${themeColor}&nextButton=true&autoNext=true&title=true`;
+      url = `${baseUrl}/tv/${tmdbId}/${season}/${episode}${params}&nextButton=true&autoNext=true`;
     }
 
     setSrc(url);
@@ -33,18 +35,17 @@ export default function PlayerShell({
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto px-0 md:px-12 mt-16 md:mt-24">
-      {/* 16:9 Container */}
       <div className="relative w-full pt-[56.25%] bg-black rounded-none md:rounded-xl overflow-hidden shadow-2xl border-0 md:border border-white/10">
         {src ? (
           <iframe
             src={src}
             className="absolute top-0 left-0 w-full h-full"
             frameBorder="0"
-            // --- THE FIX: Block Popups ---
-            // We intentionally OMIT 'allow-popups' from this list.
-            // This forces the browser to block the redirect ads.
+            // FIX: Sandbox restricts popups/redirects. 
+            // We removed 'allow-popups' to stop the ads.
             sandbox="allow-forms allow-scripts allow-same-origin allow-presentation"
             allowFullScreen
+            // FIX: Removed 'autoplay' from allow list
             allow="encrypted-media; picture-in-picture"
             title={title || "Video Player"}
           />

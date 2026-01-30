@@ -18,7 +18,7 @@ export default function NetflixCard({ item }: { item: any }) {
   const detailsPath = `/${pathPrefix}/${item.id}`;
 
   const handleMouseEnter = () => {
-    // FIX: Delay increased to 3 seconds (3000ms)
+    // 3 Second Delay as requested
     timerRef.current = setTimeout(() => {
       setIsHovered(true);
     }, 3000); 
@@ -52,7 +52,7 @@ export default function NetflixCard({ item }: { item: any }) {
       onMouseEnter={handleMouseEnter} 
       onMouseLeave={handleMouseLeave}
     >
-      {/* 1. Main Link Wrapper - Make the whole card clickable */}
+      {/* 1. Main Link Wrapper (For collapsed state) */}
       <Link href={detailsPath} className="absolute inset-0 z-10">
         <span className="sr-only">View {item.title}</span>
       </Link>
@@ -68,13 +68,15 @@ export default function NetflixCard({ item }: { item: any }) {
       {/* 2. Expanded Card */}
       {isHovered && (
         <div className="absolute top-[-20%] left-[-10%] z-50 w-[120%] rounded-md bg-[#181818] shadow-2xl transition-all duration-300 animate-in fade-in zoom-in-95 hidden md:block">
-          <div className="relative h-40 w-full overflow-hidden rounded-t-md">
+          
+          {/* LINK WRAPPER FOR VIDEO AREA - FIXES CLICK ISSUE */}
+          <Link href={detailsPath} className="block relative h-40 w-full overflow-hidden rounded-t-md">
             {trailer ? (
               <iframe
                 src={`https://www.youtube.com/embed/${trailer}?autoplay=1&mute=1&controls=0&modestbranding=1&loop=1`}
-                // FIX: pointer-events-none ensures clicks go to the parent Link/Div, not the iframe
                 className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none scale-125"
                 allow="autoplay; encrypted-media"
+                tabIndex={-1}
               />
             ) : (
                <img
@@ -83,12 +85,11 @@ export default function NetflixCard({ item }: { item: any }) {
                 className="w-full h-full object-cover"
               />
             )}
-          </div>
+          </Link>
 
           <div className="p-4 shadow-lg bg-[#181818] rounded-b-md relative z-20">
              <div className="flex items-center justify-between mb-3">
                <div className="flex gap-2">
-                 {/* Explicit Link on Play Button too */}
                  <Link href={detailsPath} className="flex items-center justify-center h-8 w-8 rounded-full bg-white hover:bg-gray-200 transition">
                    <Play className="h-4 w-4 fill-black text-black ml-0.5" />
                  </Link>
@@ -96,6 +97,9 @@ export default function NetflixCard({ item }: { item: any }) {
                    <Plus className="h-4 w-4" />
                  </button>
                </div>
+               <Link href={detailsPath} className="h-8 w-8 rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-white text-gray-400 hover:text-white ml-auto">
+                 <ChevronDown className="h-4 w-4" />
+               </Link>
              </div>
              <div className="flex flex-wrap gap-x-2 text-xs text-white">
                {genres.join(' • ')}
